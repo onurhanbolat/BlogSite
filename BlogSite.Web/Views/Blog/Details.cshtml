@@ -1,0 +1,105 @@
+﻿@model BlogSite.Application.Models.ViewModels.BlogViewModels.BlogDetailViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+    var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+}
+
+<div class="container px-4 px-lg-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+
+            <h1 class="mb-3">@Model.Title</h1>
+
+            <p class="text-muted">
+                Yayınlayan: <strong>@Model.AuthorUserName</strong> |
+                @Model.CreatedDate.ToString("dd MMMM yyyy") |
+                Kategori: <span class="text-info">@Model.CategoryName</span>
+            </p>
+
+            <div class="content mb-5">
+                <p>@Html.Raw(Model.Content)</p>
+            </div>
+
+            <div class="text-start mb-4">
+                <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">← Geri dön</a>
+            </div>
+
+            <hr />
+            <h4 class="mt-5 mb-3">Yorumlar</h4>
+
+            @if (Model.Comments != null && Model.Comments.Any())
+            {
+                foreach (var comment in Model.Comments)
+                {
+                    <div class="border rounded-3 p-3 mb-3 shadow-sm bg-white">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small class="text-muted">
+                                <strong>@comment.AuthorUserName</strong> – @comment.CreatedDate.ToString("dd MMMM yyyy HH:mm")
+                            </small>
+
+                            @if (currentUserId == comment.AuthorId || User.IsInRole("Admin"))
+                            {
+                                <form asp-controller="Comment" asp-action="Delete" method="post" class="d-inline">
+                                    <input type="hidden" name="commentId" value="@comment.Id" />
+                                    <input type="hidden" name="blogId" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1">Sil</button>
+                                </form>
+                            }
+                        </div>
+
+                        <p class="mb-0 text-dark">@comment.Content</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">Henüz yorum yapılmamış.</p>
+            }
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <h5 class="mt-4 mb-3">Yorum Yap</h5>
+
+                <form asp-controller="Comment" asp-action="Add" method="post" class="bg-white border rounded-3 p-3 shadow-sm">
+                    <input type="hidden" name="BlogId" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <textarea name="Content"
+                                  class="form-control rounded-3 border-0 shadow-none auto-expand"
+                                  placeholder="Yorumunuzu yazın..."
+                                  style="resize: none; overflow: hidden; background-color: #ffffff;" required></textarea>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-outline-secondary rounded-pill px-4">Gönder</button>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <div class="rounded-3 px-3 py-2 mt-4" style="background-color: #f5f5f5; color: #444; font-size: 0.95rem;">
+                    Yorum yapabilmek için
+                    <a asp-area="Identity" asp-page="/Account/Login" style="color: #007b8a; font-weight: 500; text-decoration: none;">
+                        giriş yapmalısınız
+                    </a>.
+                </div>
+
+            }
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const textareas = document.querySelectorAll('.auto-expand');
+        textareas.forEach(textarea => {
+            textarea.setAttribute("style", "height:" + textarea.scrollHeight + "px;overflow-y:hidden;");
+            textarea.addEventListener("input", function () {
+                this.style.height = "auto";
+                this.style.height = (this.scrollHeight) + "px";
+            });
+        });
+    </script>
+}

@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var userName = User.Identity?.Name;
+
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4 d-flex align-items-center gap-2"
+           href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle"></i> <span class="d-none d-md-inline">Profil</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end text-sm" aria-labelledby="profileDropdown">
+            <li class="dropdown-header text-muted px-3">@userName</li>
+            <li>
+                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profilim</a>
+            </li>
+            <li>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Blog")" method="post" class="dropdown-item px-3 py-1 m-0">
+                    <button type="submit" class="btn btn-link text-start w-100 p-0 text-danger">Çıkış Yap</button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link px-lg-3 py-3 py-lg-4" asp-area="Identity" asp-page="/Account/Login">Giriş</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link px-lg-3 py-3 py-lg-4" asp-area="Identity" asp-page="/Account/Register">Kayıt Ol</a>
+    </li>
+}

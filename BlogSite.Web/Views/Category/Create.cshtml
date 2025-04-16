@@ -1,0 +1,28 @@
+﻿@using BlogSite.Application.Models.ViewModels.CategoryViewModels
+@model CreateCategoryViewModel
+
+@{
+    ViewData["Title"] = "Yeni Kategori";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">Yeni Kategori Ekle</h2>
+
+<div class="card shadow-sm rounded border-0 p-4 bg-white">
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Kategori Adı</label>
+            <input asp-for="Name" class="form-control rounded-pill px-4" placeholder="Kategori adı girin" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mt-3 text-end">
+            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 me-2">Geri</a>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">Kaydet</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

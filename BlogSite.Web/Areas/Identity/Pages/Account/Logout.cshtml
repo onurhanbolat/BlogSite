@@ -1,0 +1,25 @@
+﻿@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Çıkış Yap";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <button type="submit" class="btn btn-danger">Çıkış Yap</button>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-success mt-3">
+                Uygulamadan başarıyla çıkış yaptınız.
+            </div>
+        }
+    </div>
+</div>

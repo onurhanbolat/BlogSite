@@ -1,0 +1,76 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profilim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-5 bg-white">
+                <div class="card-body p-4">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold text-center text-dark d-block">Kullanıcı Adı</label>
+                            <input asp-for="Username" class="form-control border-0 rounded-pill px-3 py-2 text-center bg-white" disabled />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-semibold text-dark mb-0">Yazdığınız Bloglar</h5>
+                <a asp-controller="Blog" asp-action="Create" class="btn btn-outline-success rounded-pill px-4 py-2 fw-semibold">+ Yeni Blog</a>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-0">
+                    @if (Model.Blogs != null && Model.Blogs.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0 w-100">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width: 30%;">Başlık</th>
+                                        <th style="width: 25%;">Kategori</th>
+                                        <th style="width: 20%;">Tarih</th>
+                                        <th style="width: 25%;" class="text-center">İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var blog in Model.Blogs)
+                                    {
+                                        <tr>
+                                            <td>@blog.Title</td>
+                                            <td>@blog.CategoryName</td>
+                                            <td>@blog.CreatedDate.ToString("dd.MM.yyyy")</td>
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <a asp-action="Edit" asp-route-id="@blog.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">Düzenle</a>
+                                                    <a asp-action="Delete" asp-route-id="@blog.Id" class="btn btn-sm btn-outline-danger rounded-pill px-3">Sil</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted small">
+                            Henüz blog yazınız yok.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

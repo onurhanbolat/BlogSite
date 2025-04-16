@@ -1,0 +1,76 @@
+﻿@using BlogSite.Application.Models.ViewModels.BlogViewModels
+@model List<BlogAdminListViewModel>
+
+@{
+    ViewData["Title"] = "Admin Paneli";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">Admin Paneli - Tüm Bloglar</h2>
+
+<table class="table table-hover shadow-sm rounded bg-white">
+    <thead class="table-light">
+        <tr>
+            <th>Başlık</th>
+            <th>Kategori</th>
+            <th>Tarih</th>
+            <th>Yazar</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var blog in Model)
+        {
+            <tr>
+                <td>@blog.Title</td>
+                <td>@blog.CategoryName</td>
+                <td>@blog.CreatedDate.ToString("dd.MM.yyyy")</td>
+                <td>@blog.AuthorUserName</td>
+                <td>
+                    <button class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal"
+                            data-blog-id="@blog.Id"
+                            data-blog-title="@blog.Title">
+                        <i class="fas fa-trash-alt me-1"></i> Sil
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-sm rounded">
+            <form method="post" asp-action="DeleteBlog">
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-semibold" id="deleteModalLabel">Blogu Sil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="modalBlogId" />
+                    <p class="mb-0">"<strong id="modalBlogTitle"></strong>" başlıklı blogu silmek istediğinize emin misiniz?</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">Sil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const blogId = button.getAttribute('data-blog-id');
+            const blogTitle = button.getAttribute('data-blog-title');
+
+            document.getElementById('modalBlogId').value = blogId;
+            document.getElementById('modalBlogTitle').textContent = blogTitle;
+        });
+    </script>
+}

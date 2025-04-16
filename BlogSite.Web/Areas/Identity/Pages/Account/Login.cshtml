@@ -1,0 +1,41 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+<h5 class="text-center text-muted mb-4">Hesabınıza giriş yapın</h5>
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="E-posta" />
+                <label asp-for="Input.Email">E-posta</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-4">
+                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="Şifre" />
+                <label asp-for="Input.Password">Şifre</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <button id="login-submit" type="submit" class="btn btn-outline-secondary w-100 rounded-pill py-2 mb-3">
+                Giriş Yap
+            </button>
+
+            <div class="text-center small">
+                <a class="text-decoration-none" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Hesabınız yok mu? Kayıt Ol</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,88 @@
+﻿@using BlogSite.Application.Models.ViewModels.UserViewModels
+@model List<UserRoleViewModel>
+
+@{
+    ViewData["Title"] = "Kullanıcı Yönetimi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">Kullanıcı Yönetimi</h2>
+
+<table class="table table-hover shadow-sm rounded bg-white">
+    <thead class="table-light">
+        <tr>
+            <th scope="col" class="text-start">E-posta</th>
+            <th scope="col" class="text-start">Kullanıcı Adı</th>
+            <th scope="col" class="text-start">Rol</th>
+            <th scope="col" class="text-start">Yeni Rol Ata</th>
+            <th scope="col" class="text-start">İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td class="text-start">@user.Email</td>
+                <td class="text-start">@user.UserName</td>
+                <td class="text-start">@string.Join(", ", user.Roles)</td>
+                <td class="text-start">
+                    <form asp-action="ChangeRole" method="post" class="d-flex align-items-center gap-2">
+                        <input type="hidden" name="userId" value="@user.UserId" />
+                        <select name="newRole" class="form-select form-select-sm rounded-pill w-auto">
+                            <option value="User" selected>Kullanıcı</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill px-3">Kaydet</button>
+                    </form>
+                </td>
+                <td class="text-start">
+                    @if (user.IsDeletable)
+                    {
+                        <button class="btn btn-outline-danger btn-sm rounded-pill px-3"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteUserModal"
+                                data-user-id="@user.UserId"
+                                data-user-email="@user.Email">
+                            <i class="fas fa-trash-alt me-1"></i> Sil
+                        </button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-sm rounded">
+            <form method="post" asp-action="DeleteUser">
+                <div class="modal-header bg-light border-0">
+                    <h5 class="modal-title fw-semibold" id="deleteUserModalLabel">Kullanıcıyı Sil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="userId" id="modalUserId" />
+                    <p class="mb-0"><strong id="modalUserEmail"></strong> e-posta adresine sahip kullanıcıyı silmek istediğinize emin misiniz?</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">Sil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const deleteUserModal = document.getElementById('deleteUserModal');
+        deleteUserModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const userId = button.getAttribute('data-user-id');
+            const userEmail = button.getAttribute('data-user-email');
+
+            document.getElementById('modalUserId').value = userId;
+            document.getElementById('modalUserEmail').textContent = userEmail;
+        });
+    </script>
+}

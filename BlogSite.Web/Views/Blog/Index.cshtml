@@ -1,0 +1,57 @@
+﻿@using BlogSite.Application.Models.ViewModels.BlogViewModels
+@model BlogIndexViewModel
+@{
+    ViewData["Title"] = "Anasayfa";
+}
+
+<div class="container px-4 px-lg-5 mt-3 mb-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <form method="get" asp-controller="Blog" asp-action="Index">
+                <div class="input-group">
+                    <select class="form-select" name="categoryId" onchange="this.form.submit()">
+                        <option value="">Tüm Kategoriler</option>
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.Value" selected="@(category.Value == Model.SelectedCategoryId?.ToString() ? "selected" : null)">
+                                @category.Text
+                            </option>
+                        }
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            @if (Model.Blogs != null && Model.Blogs.Any())
+            {
+                foreach (var blog in Model.Blogs)
+                {
+                    <div class="post-preview">
+                        <a asp-controller="Blog" asp-action="Details" asp-route-id="@blog.Id">
+                            <h2 class="post-title">@blog.Title</h2>
+                            @if (!string.IsNullOrEmpty(blog.Summary))
+                            {
+                                <h3 class="post-subtitle">@blog.Summary</h3>
+                            }
+                        </a>
+                        <p class="post-meta">
+                            Yayınlayan: <strong>@blog.AuthorUserName</strong> |
+                            @blog.CreatedDate.ToString("dd MMMM yyyy") |
+                            <span class="text-muted">Kategori: @blog.CategoryName</span>
+                        </p>
+                    </div>
+                    <hr class="my-4" />
+                }
+            }
+            else
+            {
+                <p class="text-center text-muted">Henüz blog yazısı eklenmemiş.</p>
+            }
+        </div>
+    </div>
+</div>
