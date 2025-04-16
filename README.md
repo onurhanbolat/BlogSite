@@ -53,12 +53,11 @@ Bu proje, **temiz kod** ve **sürdürülebilirlik** hedefiyle **katmanlı mimari
 
 ### 📁 `BlogSite.Application`
 - İş mantığının tanımlandığı katmandır.
-- Tüm `Interface` tanımları ve `ViewModel`/`DTO` yapıları burada yer alır.
-- `Loose Coupling` prensibi uygulanarak bağımlılıklar azaltılmıştır.
+- Tüm `Interface` tanımları ve `ViewModel`yapıları burada yer alır.
 
 ### 📁 `BlogSite.Domain`
 - Projenin çekirdek katmanıdır.
-- `Entity`, `Enum`, `Role` ve `Authorization` gibi domain öğeleri burada tanımlanır.
+- `Entity`, `Role` ve `Authorization` gibi domain öğeleri burada tanımlanır.
 - Hiçbir katmana bağımlı değildir, sadece kendisini temsil eder.
 
 ### 📁 `BlogSite.Infrastructure`
