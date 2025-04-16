@@ -22,7 +22,7 @@ Bu proje, ASP.NET Core MVC kullanılarak geliştirilen katmanlı mimariye sahip 
 - Kullanıcılar sadece kendi yorumlarını silebilir
 
 🔐 **Rol Tabanlı Yetkilendirme**
-- `Admin`, `User` ve `Ziyaretçi` rollerine özel yetkiler
+- `Admin` ve `User` rollerine özel yetkiler
 - Admin her içeriği görüntüleyebilir ve yönetebilir
 
 📊 **Blog Okunma Sayısı Takibi**
